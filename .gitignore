@@ -166,6 +166,10 @@ pythontex-files-*/
 TSWLatexianTemp*
 
 ## Editors:
+# vim/neovim
+*.swp
+*.swo
+
 # WinEdt
 *.bak
 *.sav
