@@ -52,9 +52,13 @@
 	]{microtype}
 \fi % --- end of lualatex/pdflatex specified packages
 
-% we want to use the HTWDD beamer theme
+% We want to use the HTWDD beamer theme.
 \usetheme{HTWDD}
-\logo{\includegraphics[height=0.8cm]{logo/logoHTWDD.pdf}} % the HTWDD logo
+% This theme already initializes a HTWDD logo.
+% If you want to use another logo or want to clear the logo, define it with the logo command,
+% e.g.:
+%   \logo{\includegraphics[height=0.8cm]{mylogo.pdf}}
+%   \logo{}
 
 % set here your title, titlegraphic, date, author, institute
 \title[My Presentation]{My HTWDD presentation}
