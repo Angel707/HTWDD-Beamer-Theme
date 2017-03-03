@@ -35,7 +35,10 @@
 %% enable externalize only when shell escape is used by the user
 %%   pdflatex sexternalize.tex               --> externalize disabled
 %%   pdflatex -shell-escape sexternalize.tex --> externalize enabled
-\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{}{\tikzexternalize}
+\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{}{
+	\usepackage{shellesc}
+	\tikzexternalize
+}
 
 %% put externalize files (*.pdf *.log *.dpth *.md5) in separate subdirectory
 %%   note that *.md5 will be put in <outdir>/external/

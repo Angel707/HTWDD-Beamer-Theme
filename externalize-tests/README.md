@@ -10,8 +10,8 @@
 | TeXLive 2016 | pdflatex | yes                 | build      | yes     |
 | TeXLive 2016 | lualatex | no                  | -          | yes     |
 | TeXLive 2016 | lualatex | no                  | build      | yes     |
-| TeXLive 2016 | lualatex | yes                 | -          | no      |
-| TeXLive 2016 | lualatex | yes                 | build      | no      |
+| TeXLive 2016 | lualatex | yes                 | -          | yes     |
+| TeXLive 2016 | lualatex | yes                 | build      | yes     |
 
 
 Commands used for TeXLive and PDFLaTeX:
@@ -43,6 +43,9 @@ and an error like this is thrown:
   Type  H <return>  for immediate help.
   ...                                              
   l.38 \end{tikzpicture}
+
+Note that the LuaLaTeX compiler requires the shellesc package to be able to use system calls.
+
 
 ### Can't write on file (prefix feature)
 
