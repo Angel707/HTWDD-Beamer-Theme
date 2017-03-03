@@ -1,0 +1,53 @@
+%% Copyright 2015-2017 Angelos Drossos
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+
+%% externalize needs \write18 latex compiler feature to be enabled:
+%%   TeXLive: -shell-escape
+%%   MiKTeX:  -enable-write18
+%% Because this feature enables the compiler to generate system calls,
+%% it is usually disabled by default for security reasons.
+%% In tex documents which should be compileable with many latex distributions,
+%% this feature is a problem because the command line options differ between them.
+%% Thus, we cannot enable externalize by default
+%% so that the user must enable this compilation improvement explicitly.
+
+% ---{{{ LuaLaTeX hotfix when ``pgfsys-luatex.def'' not found
+% TexLive 2016 and MiKTeX
+\RequirePackage{ifluatex}
+\ifluatex
+\RequirePackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+\fi
+% ---}}}
+
+\documentclass{minimal}
+
+\usepackage{ifthen}
+\usepackage{tikz}
+\usetikzlibrary{external}
+
+%% enable externalize always (for testing purpose)
+%\tikzexternalize
+
+%% enable externalize only when shell escape is used by the user
+%%   pdflatex sexternalize.tex               --> externalize disabled
+%%   pdflatex -shell-escape sexternalize.tex --> externalize enabled
+\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{}{\tikzexternalize}
+
+%% put externalize files (*.pdf *.log *.dpth *.md5) in separate subdirectory
+%%   note that *.md5 will be put in <outdir>/external/
+%%   make sure that this directory exists
+\tikzsetexternalprefix{external/}
+
+\begin{document}
+%% simple tikz picture
+\begin{tikzpicture}[auto, scale = 1.0]
+\node{TikZ-Picture};
+\end{tikzpicture}
+
+%% output text of \tikzexternalcheckshellescape command
+\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{no-externalize}{-externalize:\tikzexternalcheckshellescape{}:-}
+\end{document}
