@@ -63,10 +63,24 @@
 \makeatother
 
 %% Requirements
+\RequirePackage{ifthen}
 \RequirePackage{tikz}
 \usetikzlibrary{math}
 \usetikzlibrary{calc}
+\usetikzlibrary{external}
 
+%% enable externalize only when shell escape is used by the user
+%%   pdflatex presentation.tex               --> externalize disabled
+%%   pdflatex -shell-escape presentation.tex --> externalize enabled
+\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{}{
+	\RequirePackage{shellesc}
+	\tikzexternalize
+}
+
+%% put externalize files (*.pdf *.log *.dpth *.md5) in separate subdirectory
+%%   note that *.md5 will be put in <outdir>/external/
+%%   make sure that this directory exists
+%\tikzsetexternalprefix{external/}
 
 %% constant math calculations
 \tikzmath {
@@ -126,9 +140,9 @@
 %	mini frame offset=.03cm
 %}
 
-
 \defbeamertemplate*{background canvas}{HTWDD}
 {
+	\tikzset{external/export next=false}
 	\begin{tikzpicture}
 		\useasboundingbox[fill=white] (0,0) rectangle (\cbackgroundsize);
 	\end{tikzpicture}
@@ -149,6 +163,7 @@
 %% text style of footline (including footline background)
 \defbeamertemplate*{footline}{HTWDD}
 {
+	\tikzset{external/export next=false}
 	\tikzmath {
 		coordinate \ctitle;
 		coordinate \cpagenumber;
@@ -253,17 +268,33 @@
 \defbeamertemplate*{sidebar right}{HTWDD}
 {}
 
-\defbeamertemplate*{logo}{HTWDD}
-{
-	\begin{tikzpicture}[auto, scale = 1.5]
-	\input{beamerouterthemeHTWDD_logo.tikz}
-	\end{tikzpicture}
+% HTWDD beamer theme logo (typesetted only once)
+%   The AtBeginDocument command is important so that the tikz externalize library
+%   is able to typeset the HTWDD logo.
+\newsavebox{\htwddlogo}
+\AtBeginDocument{%
+	\savebox{\htwddlogo}{%<-- this % and the other % are important to set the logo to the correct place
+		\ifbeamertemplateempty{logo}{%
+			% no customized logo defined, use HTWDD logo
+			\PackageWarning{beamerouterthemeHTWDD}{The HTWDD logo is used. If you want to change the logo, use the logo command.}
+			\usebeamercolor{logo}%
+			\usebeamerfont{logo}%
+			\tikzset{external/export next=true}%
+			\tikzsetnextfilename{logoHTWDD}%
+			\begin{tikzpicture}
+			\input{beamerouterthemeHTWDD_logo.tikz}
+			\end{tikzpicture}%
+		}{%
+			% customized logo defined, don't use HTWDD logo
+			\insertlogo%
+		}%
+	}%
 }
-
 
 %% text style of frametitle (including frametitle background)
 \defbeamertemplate*{frametitle}{HTWDD}
 {
+	\tikzset{external/export next=false}
 	\hspace*{\cframetitleleftskipx}%<-- this % is important
 	\vspace*{\cframetitleleftskipy}%<-- this % is important
 	\begin{tikzpicture}
@@ -292,9 +323,9 @@
 		}
 		\fi
 		%% LOGO
-		\node[anchor=north east, outer sep=0pt, inner sep=0pt]
+		\node[anchor=north east, outer sep=0pt, inner sep=0pt, align=right]
 			at (\cframetitlesizex-\cprogressbarsepx, 0.8*\cframetitlesizey)
-			{\insertlogo};
+			{\usebox{\htwddlogo}};
 		%% frametitle foreground -- end
 	\end{tikzpicture}
 }

@@ -11,6 +11,15 @@
 \RequirePackage{tikz}
 \usetikzlibrary{math}
 \usetikzlibrary{calc}
+\usetikzlibrary{external}
+
+%% enable externalize only when shell escape is used by the user
+%%   pdflatex presentation.tex               --> externalize disabled
+%%   pdflatex -shell-escape presentation.tex --> externalize enabled
+\ifthenelse{\equal{\tikzexternalcheckshellescape}{}}{}{
+	\RequirePackage{shellesc}
+	\tikzexternalize
+}
 
 %% constant math calculations
 \tikzmath {
@@ -28,6 +37,7 @@
 %%   must be declared in beamercolortheme
 \defbeamertemplate*{title page}{HTWDD}
 {
+	\tikzset{external/export next=false}
 	\hspace*{-\beamer@leftmargin}%<-- this % is important
 	\begin{tikzpicture}
 		%% include used colors (fg/bg)

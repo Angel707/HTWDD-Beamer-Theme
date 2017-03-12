@@ -12,7 +12,18 @@ Angelos Drossos decided to refactor this theme using technics provided by tikz.
 
 ## Requirements
 
-This beamer theme requires the TikZ (pgf) package to be able to compile.
+This beamer theme requires the following packages to be able to compile:
+
+ * ifthen
+ * TikZ (pgf)
+ * shellesc (only needed when the LaTeX shell escape feature is used)
+
+From the TikZ package, the following libraries are used:
+
+ * math
+ * calc
+ * external
+
 The example representation is compileable with PDFLaTeX and LuaLaTeX.
 
 
@@ -68,6 +79,32 @@ When the LaTeX compiler shows the following error message or something similar,
 
 then the HTWDD beamer theme is not in any search path
 used by the LaTeX compiler.
+
+
+## TikZ Externalization Library
+
+This beamer theme supports the TikZ Externalization Library.
+
+  The TikZ Externalization Library provides a high-level automatic or
+  semi–automatic export feature for TikZ pictures. Its purpose is to
+  convert each picture to a separate pdf without changing the document
+  as such.
+
+This library needs the shell scape feature of LaTeX, which is disabled
+by default due to security reasons. The shell escape feature enables
+the LaTeX compiler to use system calls to be able to generate separate
+PDF files for each TikZ picture. In other words, the LaTeX compiler
+calls himself with the TikZ picture as main tex file.
+
+To use the support of externalization library, the user must activate
+the LaTeX shell escape (\write18) feature by using the command-line option:
+
+ * TeXLive: -shell-escape
+ * MiKTeX: -enable-write18
+
+The beamer theme then detects this usage and enables the externalization
+by using the command \tikzexternalize and loads the shellesc package.
+The shellesc package is needed in combination with LuaLaTeX.
 
 
 ## License

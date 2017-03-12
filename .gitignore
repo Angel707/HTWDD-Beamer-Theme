@@ -1,3 +1,9 @@
+## Build directories
+build/
+
+## Tex files used for testing
+*test.tex
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
